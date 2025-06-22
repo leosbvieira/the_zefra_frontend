@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import VisaoGeral from "./pages/VisaoGeral";
 import Layout from "./Layout";
+import ProtectedRoute from "./ProtectedRoute";
+
 
 function App() {
   return (
@@ -12,9 +14,11 @@ function App() {
         <Route
           path="/visao-geral"
           element={
-            <Layout>
-              <VisaoGeral />
-            </Layout>
+            <ProtectedRoute>
+              <Layout>
+                <VisaoGeral />
+              </Layout>
+            </ProtectedRoute>
           }
         />
       </Routes>
