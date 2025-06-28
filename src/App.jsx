@@ -4,6 +4,10 @@ import Login from "./pages/Login";
 import VisaoGeral from "./pages/VisaoGeral";
 import Layout from "./Layout";
 import ProtectedRoute from "./ProtectedRoute";
+import Remessas from "./pages/Remessas";
+import Estoque from "./pages/Estoque";
+import EmConstrucao from "./pages/EmConstrucao";
+
 
 
 function App() {
@@ -17,6 +21,36 @@ function App() {
             <ProtectedRoute>
               <Layout>
                 <VisaoGeral />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/remessas"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <Remessas />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/estoque"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <Estoque />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="*"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <EmConstrucao />
               </Layout>
             </ProtectedRoute>
           }

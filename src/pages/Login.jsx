@@ -93,4 +93,6 @@ export default function Login() {
     </div>
   );
 }
+// Esse é o componente de login. Ele renderiza um formulário de login com campos para e-mail e senha. Quando o usuário envia o formulário, ele faz uma requisição POST para o endpoint de login do backend. Se o login for bem-sucedido, ele salva o token no armazenamento local e redireciona o usuário para a página protegida ("/visao-geral"). Se houver algum erro, ele exibe uma mensagem de erro.
+// O componente também inclui validação básica para garantir que os campos não estejam vazios antes de enviar a requisição. Se os campos estiverem vazios, ele exibe uma mensagem de erro
 

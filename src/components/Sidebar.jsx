@@ -1,115 +1,100 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import {
-  ChevronDown,
-  ChevronRight,
-  ChevronLeft,
   LayoutDashboard,
-  Briefcase,
-  FolderKanban,
-  FileText,
+  BarChart2,
+  Layers,
+  Settings,
+  Repeat,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
-const Sidebar = ({ isExpanded, setIsExpanded }) => {
-  const [openSections, setOpenSections] = useState({}); 
 
-  const toggleSection = (label) => {                    
-    setOpenSections((prev) => ({
-      ...prev,
-      [label]: !prev[label],
-    }));
+const menuItems = [
+  { icon: <LayoutDashboard size={20} />, label: "Gestão" },
+  { icon: <BarChart2 size={20} />, label: "Analytics", badge: "Beta" },
+  { icon: <Layers size={20} />, label: "Remessas" },
+  { icon: <Repeat size={20} />, label: "Conversores" },
+];
+
+export default function Sidebar({ setSection }) {
+  const navigate = useNavigate();
+  const [activeLabel, setActiveLabel] = useState("Dashboard Ativos");
+
+  const handleClick = (label) => {
+    setActiveLabel(label);
+    setSection(label);
+    switch (label) {
+      case "Dashboard Ativos":
+        navigate("/visao-geral");
+        break;
+      case "Remessas":
+        navigate("/remessas");
+        break;
+      case "Analytics":
+        navigate("/analytics"); // se existir
+        break;
+      case "Gestão":
+        navigate("/gestao"); // se existir
+        break;
+      case "Conversores":
+        navigate("/conversores"); // se existir
+        break;
+
+      default:
+        break;
+    }
   };
-  const sections = [
-    {
-      label: "Remessas", icon: <Briefcase size={20} />,
-      children: ["Aquisição", "Liquidação"],
-    },
-    { label: "Estoque", icon: <FileText size={20} /> },
-    {
-      label: "Conversores",
-      icon: <FolderKanban size={20} />,
-      children: ["CNAB", "XML"],
-    },
-  
-  ];
 
   return (
-    <div
-      className={`fixed top-0 left-0 h-screen z-40 bg-white border-r shadow-md transition-all duration-300 flex flex-col ${isExpanded ? "w-60" : "w-20"
-        }`}
-    >
-      {/* Logo + Botão de expandir/recolher */}
-      <div className="relative p-4 flex items-center justify-center">
+    <aside className="fixed top-0 left-0 z-40 w-[60px] h-screen bg-[#1E1F25] text-white flex flex-col justify-between items-center py-3">
+      {/* Top Logo */}
+      <div className="mb-4">
         <img
-          src={isExpanded ? "/ASDA ZEFRA.png" : "/zeeffraa.png"}
-          className="h-10 w-auto object-contain"
+          src="/log_branco_zef.png"
           alt="Logo"
+          className="h- w-8 object-contain"
         />
-
-        <button
-          onClick={() => setIsExpanded(!isExpanded)}
-          className="absolute -right-4 top-1/2 -translate-y-1/2 bg-white border border-gray-300 shadow w-8 h-8 rounded-full flex items-center justify-center hover:bg-gray-100 transition"
-        >
-          {isExpanded ? (
-            <ChevronLeft size={18} className="text-gray-500" />
-          ) : (
-            <ChevronRight size={16} className="text-gray-500" />
-          )}
-        </button>
       </div>
-      <div className="border-b border-gray-200 my-2" /> 
+      {/* Linha separadora */}
+      <div className="w-10 border-t border-white/30 mb-2 mx-auto" />
 
-      {/* Botão fixo de dashboard 
-        <div className="px-4 mb-4">
-          <button className="bg-[#338BA8] text-white w-full py-2 rounded-full text-sm font-medium shadow hover:bg-[#2b7b96] transition">
-            Dashboard
-          </button>
-        </div>
-      )}*/}
-
-      {/* Lista de menus */}
-      <ul className="space-y-1 px-2 text-sm font-medium flex-1 overflow-y-auto">
-        {sections.map((item, idx) => (
-          <li key={idx}>
+      {/* Menu */}
+      <nav className="flex-1 flex flex-col items-center gap-1 mt-1 w-full">
+        {menuItems.map((item, index) => {
+          const isActive = item.label === activeLabel;
+          return (
             <div
-              onClick={() => item.children && toggleSection(item.label)}
-              className="flex items-center px-3 py-2 rounded-md cursor-pointer hover:bg-[#d0e9f1] transition group"
+              key={index}
+              className={`w-full flex flex-col items-center gap-0.5 py-1.2 cursor-pointer text-[9px] transition-colors ${isActive ? "bg-[#4B8C8F] text-bg-[#4B8C8F]" : "hover:bg-white/10"
+                }`}
+              onClick={() => handleClick(item.label)}
             >
-              <div className="w-5 mr-3 text-[#338BA8]">{item.icon}</div>
-              {isExpanded && <span>{item.label}</span>}
-              {item.children && isExpanded && (
-                <span className="ml-auto text-gray-500 group-hover:text-[#338BA8]">
-                  {openSections[item.label] ? (
-                    <ChevronDown size={16} />
-                  ) : (
-                    <ChevronRight size={16} />
-                  )}
-                </span>
-              )}
+              <div className="w-8 h-8 flex items-center justify-center">
+                {item.icon}
+              </div>
+              <div className="text-center leading-tight">
+                {item.label}
+                {item.badge && (
+                  <span className="block text-[9px] text-purple-400">
+                    {item.badge}
+                  </span>
+                )}
+              </div>
             </div>
-            {item.children && isExpanded && openSections[item.label] && (
-              <ul className="ml-10 mt-1 text-sm text-gray-500 space-y-1">
-                {item.children.map((subItem, i) => (
-                  <li key={i}>
-                    <Link
-                      to="#"
-                      className="block hover:text-[#338BA8] transition"
-                    >
-                      {subItem}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </li>
-        ))}
-      </ul>
+          );
+        })}
+      </nav>
 
-      <div className="p-4 text-xs text-gray-400 text-center">
-        {/* Rodapé (opcional) */}
+      {/* Bottom User Icon */}
+      <div className="w-16 h-10 bg-white flex items-center justify-center mt-4">
+        <img
+          src="/iter.png"
+          alt="Logo"
+          className="h-7 w-full object-contain px-2"
+        />
       </div>
-    </div>
-  );
-};
 
-export default Sidebar;
+
+    </aside>
+  );
+}

@@ -12,7 +12,6 @@ export default function VisaoGeral() {
 
   return (
     <div className="flex flex-col h-screen">
-      <TopNavbar />
       <div className="flex flex-1 overflow-hidden">
 
         <main className="flex-1 pt-[72px] p-6 bg-transparent overflow-y-auto flex justify-center">
